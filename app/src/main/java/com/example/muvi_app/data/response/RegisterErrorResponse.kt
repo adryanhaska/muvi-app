@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class RegisterResponse(
+data class RegisterErrorResponse(
     @field:SerializedName("status")
     val status: Int,
 

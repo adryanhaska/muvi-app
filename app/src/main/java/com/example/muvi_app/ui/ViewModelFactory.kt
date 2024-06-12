@@ -28,7 +28,7 @@ class ViewModelFactory(
                 LoginViewModel(userRepository) as T
             }
             modelClass.isAssignableFrom(SignUpViewModel::class.java) -> {
-                SignUpViewModel() as T
+                SignUpViewModel(userRepository) as T
             }
             modelClass.isAssignableFrom(SearchViewModel::class.java) -> {
                 SearchViewModel(userRepository, movieRepository) as T

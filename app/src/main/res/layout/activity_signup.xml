@@ -74,16 +74,31 @@
             android:inputType="text"/>
 
         <!-- Date of Birth Field -->
-        <EditText
-            android:id="@+id/dob"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:hint="Date of Birth (DD/MM/YY)"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#B0B0B0"
-            android:backgroundTint="#B0B0B0"
-            android:inputType="date"/>
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/dobLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date of Birth"
+                android:layout_marginStart="5dp"
+                android:textColor="#B0B0B0"
+                android:textSize="18sp"
+                android:layout_marginEnd="10dp"/>
+
+            <Button
+                android:id="@+id/dobPickerButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select Date"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#B0B0B0"/>
+        </LinearLayout>
 
         <!-- Gender Selection -->
         <RadioGroup
@@ -156,15 +171,23 @@
                 android:textSize="18sp"/>
 
             <Button
-                android:id="@+id/createAccountButton"
+                android:id="@+id/signupButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:backgroundTint="#FFC107"
-                android:text="Create Account"
+                android:text="Sign Up"
                 android:textColor="#000000"
                 android:textSize="18sp"/>
         </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_marginTop="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
 
     </LinearLayout>
 </ScrollView>

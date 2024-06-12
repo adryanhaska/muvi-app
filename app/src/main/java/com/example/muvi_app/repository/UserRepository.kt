@@ -24,8 +24,16 @@ class UserRepository(
         return userPreference.getSession()
     }
 
-    suspend fun register(name: String, email: String, password: String): RegisterResponse {
-        return apiService.register(name, email, password)
+    suspend fun register(
+        username: String,
+        email: String,
+        password: String,
+        birth: String,
+        gender: Int,
+        name: String,
+    ): RegisterResponse {
+        val registerBody = ApiService.RegisterBody(username, email, password, birth, gender, name)
+        return apiService.register(registerBody)
     }
 
     suspend fun login(email: String, password: String): LoginResponse {

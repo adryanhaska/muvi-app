@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.muvi_app.databinding.ActivityLoginBinding
 import com.example.muvi_app.ui.ViewModelFactory
 import com.example.muvi_app.ui.main.MainActivity
+import com.example.muvi_app.ui.signup.SignUpActivity
 
 class LoginActivity : AppCompatActivity() {
 
@@ -32,6 +33,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setupViewAndAction() {
         setupFullscreenMode()
+        setupSignUpButtonClick()
         setupLoginButtonClick()
         observeLoginResponse()
         observeLoginErrorResponse()
@@ -59,6 +61,13 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupSignUpButtonClick() {
+        binding.createAccountButton.setOnClickListener {
+            startActivity(Intent(this, SignUpActivity::class.java))
+            finish()
+        }
+    }
+
     private fun observeLoginResponse() {
         viewModel.loginResponse.observe(this) { loginResponse ->
             showLoading(false)
@@ -80,9 +89,9 @@ class LoginActivity : AppCompatActivity() {
 
     private fun showLoginFailedDialog(message: String) {
         AlertDialog.Builder(this).apply {
-            setTitle("Login Gagal")
+            setTitle("Login Failed")
             setMessage(message)
-            setPositiveButton("Ulangi") { _, _ ->
+            setPositiveButton("try again") { _, _ ->
                 // Do nothing (stay on the login screen)
             }
             create()
