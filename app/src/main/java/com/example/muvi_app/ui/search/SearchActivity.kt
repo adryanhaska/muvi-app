@@ -1,6 +1,10 @@
 package com.example.muvi_app.ui.search
 
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.view.WindowInsets
+import android.view.WindowManager
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -13,6 +17,9 @@ import com.example.muvi_app.data.pref.dataStore
 import com.example.muvi_app.databinding.ActivitySearchBinding
 import com.example.muvi_app.repository.MovieRepository
 import com.example.muvi_app.repository.UserRepository
+import com.example.muvi_app.ui.main.MainActivity
+import com.example.muvi_app.ui.settings.SettingsActivity
+import com.example.muvi_app.ui.social.SocialActivity
 import com.google.android.material.tabs.TabLayout
 
 class SearchActivity : AppCompatActivity() {
@@ -106,6 +113,44 @@ class SearchActivity : AppCompatActivity() {
         fun addFragment(fragment: Fragment, title: String) {
             fragmentList.add(fragment)
             fragmentTitleList.add(title)
+        }
+    }
+
+    private fun setupBottomAppBar() {
+        binding.homeButton.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
+
+        binding.searchButton.setOnClickListener {
+            // do nothing
+        }
+
+        binding.socialButton.setOnClickListener {
+            startActivity(Intent(this, SocialActivity::class.java))
+            finish()
+        }
+
+        binding.settingsButton.setOnClickListener {
+            startActivity(Intent(this, SettingsActivity::class.java))
+            finish()
+        }
+    }
+
+    private fun setupView() {
+        setupFullscreenMode()
+        setupBottomAppBar()
+    }
+
+    private fun setupFullscreenMode() {
+        @Suppress("DEPRECATION")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.insetsController?.hide(WindowInsets.Type.statusBars())
+        } else {
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            )
         }
     }
 }
