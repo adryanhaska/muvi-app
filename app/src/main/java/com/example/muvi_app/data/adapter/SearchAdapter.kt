@@ -6,56 +6,78 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.muvi_app.data.response.Movie
+import com.example.muvi_app.data.response.Profile
+import com.example.muvi_app.data.response.UserResponse
+import com.example.muvi_app.data.utils.GenericDiffUtilCallback
+import com.example.muvi_app.databinding.ItemProfileResultBinding
 import com.example.muvi_app.databinding.ItemSearchLayoutBinding
 import com.example.muvi_app.utils.MovieDiffUtilCallback
 
 
-class SearchAdapter : RecyclerView.Adapter<SearchAdapter.ListViewHolder>() {
+class SearchAdapter(private val onItemClickCallback: OnItemClickCallback) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val listUser = mutableListOf<Movie>()
-    private lateinit var onItemClickCallback: OnItemClickCallback
+    private val listItems = mutableListOf<Any>()
 
-    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
-        this.onItemClickCallback = onItemClickCallback
+    companion object {
+        private const val TYPE_MOVIE = 0
+        private const val TYPE_PERSON = 1
     }
 
-    fun setData(data: List<Movie>) {
-        val diffCallback = MovieDiffUtilCallback(listUser, data)
+    fun setData(data: List<Any>) {
+        val diffCallback = GenericDiffUtilCallback(listItems, data)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
 
-        listUser.clear()
-        listUser.addAll(data)
+        listItems.clear()
+        listItems.addAll(data)
 
         diffResult.dispatchUpdatesTo(this)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-        val binding = ItemSearchLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ListViewHolder(binding)
+    override fun getItemViewType(position: Int): Int {
+        return when (listItems[position]) {
+            is Movie -> TYPE_MOVIE
+            is UserResponse -> TYPE_PERSON
+            else -> throw IllegalArgumentException("Invalid type of data $position")
+        }
     }
 
-    override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        holder.bind(listUser[position])
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            TYPE_MOVIE -> {
+                val binding = ItemSearchLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                MovieViewHolder(binding)
+            }
+            TYPE_PERSON -> {
+                val binding = ItemProfileResultBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                PersonViewHolder(binding)
+            }
+            else -> throw IllegalArgumentException("Invalid view type")
+        }
     }
 
-    override fun getItemCount(): Int = listUser.size
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder) {
+            is MovieViewHolder -> holder.bind(listItems[position] as Movie)
+            is PersonViewHolder -> holder.bind(listItems[position] as Profile)
+        }
+    }
 
-    inner class ListViewHolder(private val binding: ItemSearchLayoutBinding) :
+    override fun getItemCount(): Int = listItems.size
+
+    inner class MovieViewHolder(private val binding: ItemSearchLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
             itemView.setOnClickListener {
-                onItemClickCallback.onItemClicked(listUser[adapterPosition])
+                onItemClickCallback.onItemClicked(listItems[adapterPosition])
             }
         }
 
         fun bind(movie: Movie) {
             with(binding) {
-                println(movie)
                 textTitle.text = movie.title
                 textCast.text = movie.releaseDate
-                println("backdrop https://image.tmdb.org/t/p/original${movie.posterPath}")
-
+                genre.text = movie.genreIds.toString()
                 Glide.with(itemView.context)
                     .load("https://image.tmdb.org/t/p/original${movie.posterPath}")
                     .into(imagePoster)
@@ -63,7 +85,24 @@ class SearchAdapter : RecyclerView.Adapter<SearchAdapter.ListViewHolder>() {
         }
     }
 
+    inner class PersonViewHolder(private val binding: ItemProfileResultBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            itemView.setOnClickListener {
+                onItemClickCallback.onItemClicked(listItems[adapterPosition])
+            }
+        }
+
+        fun bind(profile: Profile) {
+            with(binding) {
+                textName.text = profile.name
+                textUsername.text = profile.username
+            }
+        }
+    }
+
     interface OnItemClickCallback {
-        fun onItemClicked(data: Movie)
+        fun onItemClicked(data: Any)
     }
 }

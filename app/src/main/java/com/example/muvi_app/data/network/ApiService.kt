@@ -4,8 +4,8 @@ import com.example.muvi_app.data.response.LoginResponse
 import com.example.muvi_app.data.response.MovieDetailResponse
 import com.example.muvi_app.data.response.RegisterResponse
 import com.example.muvi_app.data.response.SearchMovieResponse
+import com.example.muvi_app.data.response.UserResponse
 import retrofit2.http.*
-import retrofit2.Call
 
 
 interface ApiService {
@@ -55,6 +55,6 @@ interface ApiService {
         @Header("Authorization")
         token: String,
 
-        @Path("user_id") userId: String
-    ): MovieDetailResponse
+        @Path("name") username: String
+    ): UserResponse
 }

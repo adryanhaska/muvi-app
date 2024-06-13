@@ -6,6 +6,8 @@ import com.example.muvi_app.data.network.ApiService
 import com.example.muvi_app.data.pref.UserModel
 import com.example.muvi_app.data.pref.UserPreference
 import com.example.muvi_app.data.response.LoginResponse
+import com.example.muvi_app.data.response.Movie
+import com.example.muvi_app.data.response.Profile
 import com.example.muvi_app.data.response.RegisterResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -44,6 +46,18 @@ class UserRepository(
         }
         return response
     }
+
+
+
+    suspend fun getUser(token: String, userId: String): List<Profile?>? {
+        return try {
+            val response = apiService.getUser(token, userId)
+            response.usersResponse
+        } catch (e: Exception) {
+            null
+        }
+    }
+
 
     suspend fun logout() {
         userPreference.logout()

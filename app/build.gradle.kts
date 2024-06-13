@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("kotlin-parcelize")
+    id("kotlin-kapt")
 }
 
 android {
@@ -40,9 +41,7 @@ android {
     buildFeatures {
         compose = true
         viewBinding = true
-    }
-    buildFeatures {
-        viewBinding = true
+        dataBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -77,7 +76,12 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.recyclerview)
-
+    implementation("androidx.fragment:fragment-ktx:1.8.0")
+    implementation("androidx.databinding:databinding-runtime:8.4.2")
+    implementation("androidx.room:room-common:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    implementation("androidx.room:room-runtime:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
     implementation(libs.lifecycle.livedata.ktx)
 
     implementation(libs.retrofit)
