@@ -11,29 +11,26 @@
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
-        <!-- App Title Container -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_gravity="center_horizontal">
 
-            <!-- "Movie" part of the title -->
             <TextView
                 android:id="@+id/moviePart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Movie"
+                android:text="@string/mu"
                 android:textColor="#FFFFFF"
                 android:textSize="36sp"
                 android:textStyle="bold" />
 
-            <!-- "DB" part of the title -->
             <TextView
                 android:id="@+id/dbPart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="DB"
+                android:text="@string/vi"
                 android:textColor="#FFC107"
                 android:textSize="36sp"
                 android:textStyle="bold" />
@@ -61,7 +58,6 @@
             android:backgroundTint="#B0B0B0"
             android:inputType="text"/>
 
-        <!-- Full Name Field -->
         <EditText
             android:id="@+id/fullName"
             android:layout_width="match_parent"
@@ -73,7 +69,6 @@
             android:backgroundTint="#B0B0B0"
             android:inputType="text"/>
 
-        <!-- Date of Birth Field -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -100,7 +95,6 @@
                 android:backgroundTint="#B0B0B0"/>
         </LinearLayout>
 
-        <!-- Gender Selection -->
         <RadioGroup
             android:id="@+id/genderGroup"
             android:layout_width="match_parent"
@@ -127,7 +121,6 @@
                 android:layout_marginStart="20dp"/>
         </RadioGroup>
 
-        <!-- Email Field -->
         <EditText
             android:id="@+id/email"
             android:layout_width="match_parent"
@@ -139,7 +132,6 @@
             android:backgroundTint="#B0B0B0"
             android:inputType="textEmailAddress"/>
 
-        <!-- Password Field -->
         <EditText
             android:id="@+id/password"
             android:layout_width="match_parent"
@@ -151,7 +143,6 @@
             android:backgroundTint="#B0B0B0"
             android:inputType="textPassword"/>
 
-        <!-- Buttons Container -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

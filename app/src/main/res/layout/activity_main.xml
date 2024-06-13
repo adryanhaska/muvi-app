@@ -36,7 +36,7 @@
                 android:id="@+id/text_popular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Popular Movie"
+                android:text="@string/popular_movie"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -69,7 +69,7 @@
                 android:id="@+id/text_recomend"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Recomend movie"
+                android:text="@string/recommended_movie"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -103,7 +103,7 @@
                 android:id="@+id/text_category"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Category"
+                android:text="@string/category"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -137,7 +137,7 @@
                 android:id="@+id/text_upcomming"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Upcomming Movie"
+                android:text="@string/upcoming_movie"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -210,7 +210,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Home"
+                        android:text="@string/home"
                         android:textAlignment="center"
                         android:textColor="#FFD130" />
 
@@ -260,7 +260,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Social"
+                        android:text="@string/profile"
                         android:textAlignment="center"
                         android:textColor="@color/white" />
 
