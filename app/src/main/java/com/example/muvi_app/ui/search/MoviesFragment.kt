@@ -39,7 +39,7 @@ class MoviesFragment : Fragment() {
             override fun onItemClicked(data: Any) {
                 if (data is Movie) {
                     val intent = Intent(context, MovieDetailActivity::class.java).apply {
-                        putExtra("MOVIE_ID", data.id)
+                        putExtra("movie_id", data.id)
                     }
                     startActivity(intent)
                 }
