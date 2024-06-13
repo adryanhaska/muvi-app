@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.settings.SettingsActivity"
-    android:background="#212121"
-    >
+    android:background="@color/main">
 
 
     <Button
@@ -17,7 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:backgroundTint="#FFD130"
+        android:backgroundTint="@color/accent"
         android:text="Logout"
         android:textSize="20sp"
         android:textColor="@color/black"/>
@@ -33,7 +32,7 @@
         <com.google.android.material.bottomappbar.BottomAppBar
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:backgroundTint="#202123"
+            android:backgroundTint="@color/main"
             android:gravity="bottom"
             app:fabAlignmentMode="center">
 
@@ -61,7 +60,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Home"
+                        android:text="@string/home"
                         android:textAlignment="center"
                         android:textColor="@color/white" />
 
@@ -86,7 +85,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Search"
+                        android:text="@string/search"
                         android:textAlignment="center"
                         android:textColor="@color/white" />
 
@@ -111,7 +110,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Social"
+                        android:text="@string/profile"
                         android:textAlignment="center"
                         android:textColor="@color/white" />
 
@@ -131,22 +130,17 @@
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
                         android:src="@drawable/ic_settings"
-                        app:tint="#FFD130" />
+                        app:tint="@color/accent" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Settings"
+                        android:text="@string/settings"
                         android:textAlignment="center"
-                        android:textColor="#FFD130" />
+                        android:textColor="@color/accent" />
 
                 </LinearLayout>
-
             </LinearLayout>
-
         </com.google.android.material.bottomappbar.BottomAppBar>
-
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

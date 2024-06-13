@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/imageSlide"
+    android:minWidth="100dp"
+    android:scaleType="centerCrop"
+    android:adjustViewBounds="false"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:src="@tools:sample/avatars"
+    android:padding="10dp"
+    android:contentDescription="@string/similar_movies_poster">
+</ImageView>

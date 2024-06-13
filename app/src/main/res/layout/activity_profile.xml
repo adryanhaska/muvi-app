@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.social.SocialActivity"
@@ -133,21 +134,8 @@
         android:id="@+id/followButton"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/accent"
-        android:text="@string/follow"
-        android:textAllCaps="false"
-        android:textColor="#232323"
-        app:layout_constraintTop_toBottomOf="@id/statsSection"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp"/>
-
-    <Button
-        android:id="@+id/unfollowButton"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
         android:backgroundTint="@color/grey"
-        android:text="@string/unfollow"
+        android:text="@string/edit_profile"
         android:textAllCaps="false"
         android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/statsSection"
@@ -178,7 +166,7 @@
         android:layout_marginEnd="15dp"
         app:layout_constraintTop_toBottomOf="@+id/favorite"
         app:layout_constraintStart_toStartOf="parent"
-        tools:listitem="@layout/card_favorite_item" />
+        tools:listitem="@layout/card_edit_favorite" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/bottomBar"
