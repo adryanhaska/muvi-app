@@ -19,8 +19,6 @@ data class MovieDetailResponse(
 	@SerializedName("backdrop_path")
 	val backdropPath: String? = null,
 
-	val revenue: Int? = null,
-
 	val credits: Credits? = null,
 
 	val genres: List<GenresItem?>? = null,
@@ -42,7 +40,6 @@ data class MovieDetailResponse(
 
 	val runtime: Int? = null,
 
-	@SerializedName("trailer_url")
 	val trailerUrl: String? = null,
 
 	@SerializedName("poster_path")

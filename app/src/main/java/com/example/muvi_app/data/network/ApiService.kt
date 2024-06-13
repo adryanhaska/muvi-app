@@ -42,8 +42,11 @@ interface ApiService {
         @Query("name") name: String
     ): SearchMovieResponse
 
-    @GET("movie/{movie_id}")
+    @GET("movie/id/{movie_id}")
     suspend fun getMovieDetail(
+        @Header("Authorization")
+        token: String,
+
         @Path("movie_id") movieId: Int
     ): MovieDetailResponse
 }

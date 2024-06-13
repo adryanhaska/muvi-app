@@ -1,6 +1,5 @@
 package com.example.muvi_app.ui.search
 
-import MovieDetailActivity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -8,15 +7,19 @@ import android.view.View
 import android.view.Window
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.compose.ui.graphics.Color
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.muvi_app.R
 import com.example.muvi_app.data.adapter.SearchAdapter
 import com.example.muvi_app.data.response.Movie
 import com.example.muvi_app.databinding.ActivitySearchBinding
 import com.example.muvi_app.ui.ViewModelFactory
+import com.example.muvi_app.ui.detail.MovieDetailActivity
 import com.example.muvi_app.ui.main.MainActivity
 import com.example.muvi_app.ui.settings.SettingsActivity
 import com.example.muvi_app.ui.social.SocialActivity

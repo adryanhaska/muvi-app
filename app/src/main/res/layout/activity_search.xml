@@ -18,11 +18,13 @@
 
         <SearchView
             android:id="@+id/searchView"
+            style="@style/Theme.MuviApp.searchView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:queryHint="Search Here"
+            android:layout_alignParentTop="true"
+            android:background="#F4EEEE"
             android:iconifiedByDefault="false"
-            android:layout_alignParentTop="true"/>
+            android:queryHint="Search Here" />
     </LinearLayout>
 
     <com.google.android.material.tabs.TabLayout

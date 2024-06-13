@@ -1,22 +1,26 @@
+package com.example.muvi_app.ui.detail
+
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.example.muvi_app.data.adapter.CastPagerAdapter
-import com.example.muvi_app.data.adapter.SimilarMoviesAdapter
 import com.example.muvi_app.databinding.ActivityDetailBinding
 import com.example.muvi_app.ui.ViewModelFactory
-import com.example.muvi_app.ui.detail.MovieDetailViewModel
+import android.webkit.WebView
+import com.example.muvi_app.ui.webView.WebViewActivity
 
 class MovieDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailBinding
     private val viewModel by viewModels<MovieDetailViewModel> { ViewModelFactory.getInstance(this) }
 
-//    private lateinit var castPagerAdapter: CastPagerAdapter
+    private lateinit var castPagerAdapter: CastPagerAdapter
 //    private lateinit var similarMoviesAdapter: SimilarMoviesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,8 +34,22 @@ class MovieDetailActivity : AppCompatActivity() {
 
     private fun setupUI() {
         // Setup adapters for ViewPager2 and RecyclerView
-//        castPagerAdapter = CastPagerAdapter()
-//        binding.castViewPager.adapter = castPagerAdapter
+        castPagerAdapter = CastPagerAdapter()
+        binding.castViewPager.adapter = castPagerAdapter
+        binding.watchTrailerButton.setOnClickListener {
+            println("url ${viewModel.movieDetail.value?.trailerUrl}")
+            viewModel.movieDetail.value?.trailerUrl?.let { url ->
+                println(url)
+                if (url.isEmpty()) {
+                    Toast.makeText(this, "No trailer available", Toast.LENGTH_SHORT).show()
+                } else {
+                    val intent = Intent(this, WebViewActivity::class.java).apply {
+                        putExtra(WebViewActivity.EXTRA_URL, url)
+                    }
+                    startActivity(intent)
+                }
+            }
+        }
 
 //        similarMoviesAdapter = SimilarMoviesAdapter()
 //        binding.rvSimilarMovies.apply {
@@ -63,9 +81,9 @@ class MovieDetailActivity : AppCompatActivity() {
 
 
             // Update ViewPager2 adapter with cast data
-//            movieDetail.credits?.cast?.let {
-//                castPagerAdapter.submitList(it)
-//            }
+            movieDetail.credits?.cast?.let {
+                castPagerAdapter.submitList(it)
+            }
 
             // Update RecyclerView adapter with similar movies data
 //            movieDetail.similarMovies?.let {
@@ -84,6 +102,7 @@ class MovieDetailActivity : AppCompatActivity() {
 
         viewModel.error.observe(this, Observer { error ->
             // Show error message
+            println(error)
             Toast.makeText(this, "Error: $error", Toast.LENGTH_SHORT).show()
         })
     }

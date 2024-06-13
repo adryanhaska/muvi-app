@@ -25,7 +25,8 @@ class MovieRepository(private val userPreference: UserPreference) {
     }
 
     suspend fun getMovieDetail(movieId: Int): MovieDetailResponse {
-        return movieApiService.getMovieDetail(movieId)
+        val token = "Bearer ${userPreference.getSession().first().token}"
+        return movieApiService.getMovieDetail(token, movieId)
     }
 
     companion object {

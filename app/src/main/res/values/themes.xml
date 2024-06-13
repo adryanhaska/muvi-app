@@ -2,4 +2,10 @@
 <resources>
 
     <style name="Theme.MuviApp" parent="Theme.MaterialComponents.DayNight.NoActionBar" />
+
+    <style name="Theme.MuviApp.searchView">
+        <item name="colorControlNormal">#FFFFFF</item>
+        <item name="android:textColorHint">@android:color/white</item>
+        <item name="android:editTextColor">@android:color/white</item>
+    </style>
 </resources>
