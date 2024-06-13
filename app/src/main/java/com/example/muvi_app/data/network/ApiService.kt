@@ -49,4 +49,12 @@ interface ApiService {
 
         @Path("movie_id") movieId: Int
     ): MovieDetailResponse
+
+    @GET("user/{user_id}")
+    suspend fun getUser(
+        @Header("Authorization")
+        token: String,
+
+        @Path("user_id") userId: String
+    ): MovieDetailResponse
 }
