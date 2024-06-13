@@ -41,7 +41,7 @@ class ViewModelFactory(
                 SettingsViewModel(userRepository, movieRepository) as T
             }
             modelClass.isAssignableFrom(MovieDetailViewModel::class.java) -> {
-                MovieDetailViewModel(movieRepository) as T
+                MovieDetailViewModel(userRepository, movieRepository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }

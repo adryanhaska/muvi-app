@@ -1,7 +1,10 @@
 package com.example.muvi_app.data.network
 
 import com.example.muvi_app.data.response.LoginResponse
+import com.example.muvi_app.data.response.MLCResponse
+import com.example.muvi_app.data.response.MLSResponse
 import com.example.muvi_app.data.response.MovieDetailResponse
+import com.example.muvi_app.data.response.MultMovieResponse
 import com.example.muvi_app.data.response.RegisterResponse
 import com.example.muvi_app.data.response.SearchMovieResponse
 import com.example.muvi_app.data.response.UserResponse
@@ -57,4 +60,26 @@ interface ApiService {
 
         @Path("name") username: String
     ): UserResponse
+
+    @POST("movie/id")
+    suspend fun getMultMovie(
+        @Header("Authorization")
+        token: String,
+
+        @Body multId: MultId
+    ): MultMovieResponse
+
+    data class MultId(
+        val movieIds: Array<String>
+    )
+
+    @GET("recommend-synopsys")
+    suspend fun getSynopsys(
+        @Query("id") id: Int
+    ): MLSResponse
+
+    @GET("recommendation-collab")
+    suspend fun getColab(
+        @Query("id") id: String
+    ): MLCResponse
 }

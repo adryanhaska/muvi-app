@@ -13,6 +13,12 @@ import com.example.muvi_app.data.adapter.CastPagerAdapter
 import com.example.muvi_app.databinding.ActivityDetailBinding
 import com.example.muvi_app.ui.ViewModelFactory
 import android.webkit.WebView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.muvi_app.R
+import com.example.muvi_app.data.response.Movie
+import com.example.muvi_app.repository.MovieRepository
+import com.example.muvi_app.ui.main.MoviesAdapter
 import com.example.muvi_app.ui.webView.WebViewActivity
 
 class MovieDetailActivity : AppCompatActivity() {
@@ -20,8 +26,8 @@ class MovieDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
     private val viewModel by viewModels<MovieDetailViewModel> { ViewModelFactory.getInstance(this) }
 
+    private lateinit var moviesAdapter: MoviesAdapter
     private lateinit var castPagerAdapter: CastPagerAdapter
-//    private lateinit var similarMoviesAdapter: SimilarMoviesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +36,23 @@ class MovieDetailActivity : AppCompatActivity() {
 
         setupUI()
         observeViewModel()
+        setupRecyclerView()
+    }
+
+    private fun setupRecyclerView() {
+        val recyclerViewPopular = findViewById<RecyclerView>(R.id.rvSimilarMovies)
+        moviesAdapter = MoviesAdapter()
+        moviesAdapter.setOnItemClickCallback(object : MoviesAdapter.OnItemClickCallback {
+            override fun onItemClicked(data: Movie) {
+                val intent = Intent(this@MovieDetailActivity, MovieDetailActivity::class.java)
+                intent.putExtra("movie_id", data.id)
+                startActivity(intent)
+            }
+        })
+        recyclerViewPopular.apply {
+            layoutManager = LinearLayoutManager(this@MovieDetailActivity, LinearLayoutManager.HORIZONTAL, false)
+            adapter = moviesAdapter
+        }
     }
 
     private fun setupUI() {
@@ -67,6 +90,17 @@ class MovieDetailActivity : AppCompatActivity() {
             viewModel.getMovieDetail(movieId)
         }
 
+        if (movieId == -1) {
+            Toast.makeText(this, "Movie ID not found", Toast.LENGTH_SHORT).show()
+            finish()
+        } else {
+            viewModel.getMovieML(movieId)
+        }
+
+        viewModel.listId.observe(this, Observer {ids ->
+            println("idsss ${ids.recommendations}")
+        })
+
         viewModel.movieDetail.observe(this, Observer { movieDetail ->
             // Update UI with movie detail data
             binding.movieTitle.text = movieDetail.title
@@ -91,6 +125,25 @@ class MovieDetailActivity : AppCompatActivity() {
 //            }
         })
 
+
+
+        viewModel.getSession().observe(this, Observer { user ->
+            // Get the recommended movies once the session is available
+            val dum = arrayOf("10138",
+                "112454",
+                "629015",
+                "68721",
+                "10623")
+            println("list seharusnya $dum")
+            viewModel.getMovieRecommend(dum)
+        })
+
+        moviesAdapter = MoviesAdapter()
+
+        viewModel.movies.observe(this, Observer { response ->
+            moviesAdapter.submitList(response.movies as List<Movie>)
+        })
+
         viewModel.isLoading.observe(this, Observer { isLoading ->
             // Show loading indicator
             if (isLoading) {
@@ -103,7 +156,7 @@ class MovieDetailActivity : AppCompatActivity() {
         viewModel.error.observe(this, Observer { error ->
             // Show error message
             println(error)
-            Toast.makeText(this, "Error: $error", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Error v: $error", Toast.LENGTH_SHORT).show()
         })
     }
 }
