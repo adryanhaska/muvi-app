@@ -16,25 +16,13 @@
         android:orientation="horizontal"
         android:padding="8dp">
 
-        <EditText
-            android:id="@+id/search_input"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="@color/white"
-            android:hint="@string/search"
-            android:padding="8dp"
-            android:textColorHint="@color/white" />
-
-        <ImageButton
-            android:id="@+id/search_top"
-            android:layout_width="35dp"
-            android:layout_height="36dp"
-            android:background="?attr/selectableItemBackground"
-            android:contentDescription="@string/search"
-            android:scaleX="1.3"
-            android:scaleY="1.3"
-            android:src="@drawable/ic_search" />
+        <SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:queryHint="Search Here"
+            android:iconifiedByDefault="false"
+            android:layout_alignParentTop="true"/>
     </LinearLayout>
 
     <com.google.android.material.tabs.TabLayout
@@ -65,15 +53,16 @@
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/search_tab"
-        tools:listitem="@layout/item_search_layout"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:spanCount="2"/>
+        app:spanCount="2"
+        tools:listitem="@layout/item_search_layout" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout2"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         app:layout_constraintBottom_toBottomOf="parent"

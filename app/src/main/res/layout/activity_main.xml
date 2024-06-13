@@ -53,7 +53,8 @@
                     android:layout_height="match_parent"
                     android:clipToPadding="false"
                     android:paddingStart="12dp"
-                    android:paddingEnd="12dp"/>
+                    android:paddingEnd="12dp"
+                    tools:listitem="@layout/item_init_movies"/>
                 <ProgressBar
                     android:id="@+id/progressBar"
                     style="?android:attr/progressBarStyle"
@@ -86,7 +87,8 @@
                     android:layout_height="match_parent"
                     android:clipToPadding="false"
                     android:paddingStart="12dp"
-                    android:paddingEnd="12dp"/>
+                    android:paddingEnd="12dp"
+                    tools:listitem="@layout/item_init_movies"/>
 
                 <ProgressBar
                     android:id="@+id/progressBar2"
@@ -154,7 +156,8 @@
                     android:layout_height="match_parent"
                     android:clipToPadding="false"
                     android:paddingStart="12dp"
-                    android:paddingEnd="12dp"/>
+                    android:paddingEnd="12dp"
+                    tools:listitem="@layout/item_init_movies"/>
 
                 <ProgressBar
                     android:id="@+id/progressBar4"

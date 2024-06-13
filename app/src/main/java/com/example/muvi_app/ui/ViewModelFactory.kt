@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.muvi_app.repository.MovieRepository
 import com.example.muvi_app.repository.UserRepository
+import com.example.muvi_app.ui.detail.MovieDetailViewModel
 import com.example.muvi_app.ui.login.LoginViewModel
 import com.example.muvi_app.ui.main.MainViewModel
 import com.example.muvi_app.ui.search.SearchViewModel
@@ -38,6 +39,9 @@ class ViewModelFactory(
             }
             modelClass.isAssignableFrom(SettingsViewModel::class.java) -> {
                 SettingsViewModel(userRepository, movieRepository) as T
+            }
+            modelClass.isAssignableFrom(MovieDetailViewModel::class.java) -> {
+                MovieDetailViewModel(movieRepository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }
