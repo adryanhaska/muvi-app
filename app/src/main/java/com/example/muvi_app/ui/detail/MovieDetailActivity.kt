@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -74,11 +75,6 @@ class MovieDetailActivity : AppCompatActivity() {
             }
         }
 
-//        similarMoviesAdapter = SimilarMoviesAdapter()
-//        binding.rvSimilarMovies.apply {
-//            layoutManager = GridLayoutManager(this@MovieDetailActivity, 2)
-//            adapter = similarMoviesAdapter
-//        }
     }
 
     private fun observeViewModel() {
@@ -97,8 +93,9 @@ class MovieDetailActivity : AppCompatActivity() {
             viewModel.getMovieML(movieId)
         }
 
+
         viewModel.listId.observe(this, Observer {ids ->
-            println("idsss ${ids.recommendations}")
+            println("idsss ${ids?.recommendations}")
         })
 
         viewModel.movieDetail.observe(this, Observer { movieDetail ->
@@ -113,29 +110,32 @@ class MovieDetailActivity : AppCompatActivity() {
                 .into(binding.moviePoster)
 
 
-
-            // Update ViewPager2 adapter with cast data
             movieDetail.credits?.cast?.let {
                 castPagerAdapter.submitList(it)
             }
-
-            // Update RecyclerView adapter with similar movies data
-//            movieDetail.similarMovies?.let {
-//                similarMoviesAdapter.submitList(it)
-//            }
         })
 
+        viewModel.listId.observe(this, Observer { ids ->
+            val dum = arrayOf("10138", "112454", "629015", "68721", "10623")
+            ids?.recommendations?.let { recommendations ->
+                println("ids: $recommendations")
 
-
-        viewModel.getSession().observe(this, Observer { user ->
-            // Get the recommended movies once the session is available
-            val dum = arrayOf("10138",
-                "112454",
-                "629015",
-                "68721",
-                "10623")
-            println("list seharusnya $dum")
-            viewModel.getMovieRecommend(dum)
+                try {
+                    // Get the recommended movies once the session is available
+                    if (recommendations.isNotEmpty()) {
+                        viewModel.getMovieRecommend(recommendations.toTypedArray())
+                    } else {
+                        // Handle case where recommendations list is empty
+                        viewModel.getMovieRecommend(dum)
+                    }
+                } catch (e: Exception) {
+                    Log.e("Error fetching recommendations", e.toString())
+                    viewModel.getMovieRecommend(dum)
+                }
+            } ?: run {
+                // Handle case where ids is null
+                viewModel.getMovieRecommend(dum)
+            }
         })
 
         moviesAdapter = MoviesAdapter()

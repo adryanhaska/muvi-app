@@ -29,8 +29,8 @@ class MovieDetailViewModel(
     private val _movies = MutableLiveData<MultMovieResponse>()
     val movies: LiveData<MultMovieResponse> = _movies
 
-    private val _listId = MutableLiveData<MLSResponse>()
-    val listId: LiveData<MLSResponse> = _listId
+    private val _listId = MutableLiveData<MLSResponse?>()
+    val listId: LiveData<MLSResponse?> = _listId
 
     fun getSession(): LiveData<UserModel> = userRepository.getSession().asLiveData()
 
@@ -56,6 +56,11 @@ class MovieDetailViewModel(
                 _listId.value = response
                 _isLoading.value = false
             } catch (e: Exception) {
+                _listId.value = MLSResponse(listOf(
+                    "112454",
+                    "629015",
+                    "68721",
+                    "10623"))
                 _isLoading.value = false
                 _error.value = e.message ?: "Unknown error"
             }
