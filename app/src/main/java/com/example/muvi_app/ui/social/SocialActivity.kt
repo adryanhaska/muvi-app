@@ -9,6 +9,8 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.example.muvi_app.data.response.Profile
+import com.example.muvi_app.data.response.UserResponse
 import com.example.muvi_app.databinding.ActivitySocialBinding
 import com.example.muvi_app.ui.ViewModelFactory
 import com.example.muvi_app.ui.main.MainActivity
@@ -37,6 +39,16 @@ class SocialActivity : AppCompatActivity() {
                 navigateToWelcomeActivity()
             }
         }
+    }
+
+    private fun setupUserProfile(user: Profile) {
+        binding.textName.text = user.name
+        binding.username.text = "@${user.username}"
+        binding.followingCount.text = user.following.toString()
+
+        // Logic for follow/unfollow buttons visibility based on user's relationship
+        binding.followButton.visibility = View.VISIBLE // or View.GONE based on logic
+        binding.unfollowButton.visibility = View.GONE // or View.VISIBLE based on logic
     }
 
     private fun setupBottomAppBar() {

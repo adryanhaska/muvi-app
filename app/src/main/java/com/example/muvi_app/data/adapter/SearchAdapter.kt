@@ -11,7 +11,6 @@ import com.example.muvi_app.data.response.UserResponse
 import com.example.muvi_app.data.utils.GenericDiffUtilCallback
 import com.example.muvi_app.databinding.ItemProfileResultBinding
 import com.example.muvi_app.databinding.ItemSearchLayoutBinding
-import com.example.muvi_app.utils.MovieDiffUtilCallback
 
 
 class SearchAdapter(private val onItemClickCallback: OnItemClickCallback) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -36,7 +35,7 @@ class SearchAdapter(private val onItemClickCallback: OnItemClickCallback) : Recy
     override fun getItemViewType(position: Int): Int {
         return when (listItems[position]) {
             is Movie -> TYPE_MOVIE
-            is UserResponse -> TYPE_PERSON
+            is Profile -> TYPE_PERSON
             else -> throw IllegalArgumentException("Invalid type of data $position")
         }
     }

@@ -5,6 +5,7 @@ import com.example.muvi_app.data.response.MLCResponse
 import com.example.muvi_app.data.response.MLSResponse
 import com.example.muvi_app.data.response.MovieDetailResponse
 import com.example.muvi_app.data.response.MultMovieResponse
+import com.example.muvi_app.data.response.Profile
 import com.example.muvi_app.data.response.RegisterResponse
 import com.example.muvi_app.data.response.SearchMovieResponse
 import com.example.muvi_app.data.response.UserResponse
@@ -53,13 +54,12 @@ interface ApiService {
         @Path("movie_id") movieId: Int
     ): MovieDetailResponse
 
-    @GET("user/{user_id}")
-    suspend fun getUser(
-        @Header("Authorization")
-        token: String,
 
-        @Path("name") username: String
-    ): UserResponse
+    @GET("user")
+    suspend fun getUser(
+        @Header("Authorization") token: String,
+        @Query("username") username: String
+    ): List<Profile>
 
     @POST("movie/id")
     suspend fun getMultMovie(

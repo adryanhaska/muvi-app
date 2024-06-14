@@ -42,6 +42,7 @@ class SearchActivity : AppCompatActivity() {
         initializeViewModel()
         setupViewPagerAndTabs()
         setupSearchBar()
+        setupView()
     }
 
     private fun initializeViewModel() {

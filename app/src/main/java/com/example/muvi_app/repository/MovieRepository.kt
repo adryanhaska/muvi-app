@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.first
 
 class MovieRepository(private val userPreference: UserPreference) {
 
-    private val movieApiService = ApiConfig.getApiService()
+    private val movieApiService = ApiConfig.getApiService(userPreference)
     private val mlApiService = ApiConfig.getApiServiceMl()
 
     suspend fun getMovies(name: String): List<Movie> {

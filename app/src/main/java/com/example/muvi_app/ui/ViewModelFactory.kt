@@ -4,6 +4,7 @@ import com.example.muvi_app.data.di.Injection
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.muvi_app.data.pref.UserPreference
 import com.example.muvi_app.repository.MovieRepository
 import com.example.muvi_app.repository.UserRepository
 import com.example.muvi_app.ui.detail.MovieDetailViewModel

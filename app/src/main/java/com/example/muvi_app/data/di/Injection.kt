@@ -16,4 +16,5 @@ object Injection {
         val pref = UserPreference.getInstance(context.dataStore)
         return MovieRepository.getInstance(pref)
     }
+
 }

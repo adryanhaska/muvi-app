@@ -1,18 +1,21 @@
 package com.example.muvi_app.ui.search
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.muvi_app.data.pref.UserPreference
 import com.example.muvi_app.data.response.Movie
 import com.example.muvi_app.data.response.Profile
+import com.example.muvi_app.data.response.UserResponse
 import com.example.muvi_app.repository.MovieRepository
 import com.example.muvi_app.repository.UserRepository
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
     private val userRepository: UserRepository,
-    private val movieRepository: MovieRepository
+    private val movieRepository: MovieRepository,
 ) : ViewModel() {
 
     private val _movieList = MutableLiveData<List<Movie>>()
@@ -42,7 +45,7 @@ class SearchViewModel(
         viewModelScope.launch {
             try {
                 _isLoading.value = true
-                val users = userRepository.getUser("your_token_here", username)
+                val users = userRepository.getUser(username)
                 _peopleList.value = users as List<Profile>?
             } catch (e: Exception) {
                 handleCallError()

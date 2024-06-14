@@ -6,17 +6,19 @@ import com.example.muvi_app.data.network.ApiService
 import com.example.muvi_app.data.pref.UserModel
 import com.example.muvi_app.data.pref.UserPreference
 import com.example.muvi_app.data.response.LoginResponse
-import com.example.muvi_app.data.response.Movie
 import com.example.muvi_app.data.response.Profile
 import com.example.muvi_app.data.response.RegisterResponse
+import com.example.muvi_app.data.response.UserResponse
+import com.google.gson.JsonSyntaxException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import retrofit2.HttpException
 
 class UserRepository(
     private val userPreference: UserPreference
 ) {
 
-    private val apiService: ApiService = ApiConfig.getApiService()
+    private val apiService: ApiService = ApiConfig.getApiService(userPreference)
 
     suspend fun saveSession(user: UserModel) {
         userPreference.saveSession(user)
@@ -49,11 +51,19 @@ class UserRepository(
 
 
 
-    suspend fun getUser(token: String, userId: String): List<Profile?>? {
+    suspend fun getUser(username: String): List<Profile>? {
+        val token = userPreference.getToken()
         return try {
-            val response = apiService.getUser(token, userId)
-            response.usersResponse
+            apiService.getUser("Bearer $token", username)
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            Log.e("UserRepository", "HTTP error: ${e.code()} $errorBody")
+            null
+        } catch (e: JsonSyntaxException) {
+            Log.e("UserRepository", "JsonSyntaxException: ${e.message}")
+            null
         } catch (e: Exception) {
+            Log.e("UserRepository", "Error fetching users", e)
             null
         }
     }
