@@ -9,6 +9,7 @@ import com.example.muvi_app.data.response.MLSResponse
 import com.example.muvi_app.data.response.Movie
 import com.example.muvi_app.data.response.MovieDetailResponse
 import com.example.muvi_app.data.response.MultMovieResponse
+import com.example.muvi_app.data.response.SearchMovieResponse
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.first
 import retrofit2.HttpException
@@ -37,6 +38,20 @@ class MovieRepository(private val userPreference: UserPreference) {
         return movieApiService.getMovieDetail(token, movieId)
     }
 
+    suspend fun getMovieRecent(type: String): List<Movie> {
+        val token = "Bearer ${userPreference.getSession().first().token}"
+        println("Running recent with query $type with token $token")
+
+        try {
+            val response = movieApiService.getRecentMovie(token, type)
+            println("Response data ${response.results}")
+            return response.results ?: emptyList()
+        } catch (e: Exception) {
+            println("Error fetching movies: ${e.message}")
+            return emptyList()
+        }
+    }
+
     suspend fun getMultMovie(movieIds: Array<String>): MultMovieResponse {
         val token = "Bearer ${userPreference.getSession().first().token}"
         val Ids = ApiService.MultId(movieIds)
@@ -47,12 +62,6 @@ class MovieRepository(private val userPreference: UserPreference) {
     suspend fun getIdCollab(userId: String): MLCResponse {
         return mlApiService.getColab(userId)
     }
-
-//    suspend fun getIdSynopsys(movieId: Int): MLSResponse {
-//        println("getid $movieId")
-//        println("return syn ${mlApiService.getSynopsys(movieId)}")
-//        return mlApiService.getSynopsys(movieId)
-//    }
 
     suspend fun getIdSynopsys(movieId: Int): MLSResponse? {
         return try {
