@@ -1,5 +1,6 @@
 package com.example.muvi_app.repository
 
+import android.util.Log
 import com.example.muvi_app.data.network.ApiConfig
 import com.example.muvi_app.data.network.ApiService
 import com.example.muvi_app.data.pref.UserPreference
@@ -8,7 +9,9 @@ import com.example.muvi_app.data.response.MLSResponse
 import com.example.muvi_app.data.response.Movie
 import com.example.muvi_app.data.response.MovieDetailResponse
 import com.example.muvi_app.data.response.MultMovieResponse
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.first
+import retrofit2.HttpException
 
 class MovieRepository(private val userPreference: UserPreference) {
 
@@ -45,10 +48,30 @@ class MovieRepository(private val userPreference: UserPreference) {
         return mlApiService.getColab(userId)
     }
 
-    suspend fun getIdSynopsys(movieId: Int): MLSResponse {
-        println("getid $movieId")
-        println("return syn ${mlApiService.getSynopsys(movieId)}")
-        return mlApiService.getSynopsys(movieId)
+//    suspend fun getIdSynopsys(movieId: Int): MLSResponse {
+//        println("getid $movieId")
+//        println("return syn ${mlApiService.getSynopsys(movieId)}")
+//        return mlApiService.getSynopsys(movieId)
+//    }
+
+    suspend fun getIdSynopsys(movieId: Int): MLSResponse? {
+        return try {
+            val responseBody = mlApiService.getSynopsys(movieId)
+            val responseString = responseBody.string()
+            Log.d("MovieRepository", "getIdSynopsys response: $responseString")
+
+            val gson = Gson()
+            val response = gson.fromJson(responseString, MLSResponse::class.java)
+            response
+        } catch (e: HttpException) {
+            // HTTP error
+            Log.e("MovieRepository", "HTTP error: ${e.code()} - ${e.message()}", e)
+            null
+        } catch (e: Exception) {
+            // Other errors
+            Log.e("MovieRepository", "Error fetching synopsis: ${e.message}", e)
+            null
+        }
     }
 
     companion object {
