@@ -73,7 +73,6 @@ interface ApiService {
     suspend fun getMultMovie(
         @Header("Authorization")
         token: String,
-
         @Body multId: MultId
     ): MultMovieResponse
 
