@@ -115,7 +115,7 @@
                 android:id="@+id/similarMoviesTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/similar_movies"
+                android:text="@string/similar_movies_by_synopsys"
                 android:textSize="18sp"
                 android:textColor="@color/white"
                 android:textStyle="bold"
@@ -124,6 +124,25 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvSimilarMovies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/item_similar_movies"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="2" />
+
+            <TextView
+                android:id="@+id/similarMoviesGenreTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/similar_movies_by_genre"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvSimilarGenre"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:listitem="@layout/item_similar_movies"

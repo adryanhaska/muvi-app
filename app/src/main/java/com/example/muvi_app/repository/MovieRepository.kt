@@ -3,13 +3,14 @@ package com.example.muvi_app.repository
 import android.util.Log
 import com.example.muvi_app.data.network.ApiConfig
 import com.example.muvi_app.data.network.ApiService
+import com.example.muvi_app.data.network.ApiServiceML.RecommendBody
 import com.example.muvi_app.data.pref.UserPreference
 import com.example.muvi_app.data.response.MLCResponse
+import com.example.muvi_app.data.response.MLGResponse
 import com.example.muvi_app.data.response.MLSResponse
 import com.example.muvi_app.data.response.Movie
 import com.example.muvi_app.data.response.MovieDetailResponse
 import com.example.muvi_app.data.response.MultMovieResponse
-import com.example.muvi_app.data.response.SearchMovieResponse
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.first
 import retrofit2.HttpException
@@ -82,6 +83,31 @@ class MovieRepository(private val userPreference: UserPreference) {
             null
         }
     }
+
+    suspend fun getIdGenres(movieId: Int): MLSResponse? {
+        return try {
+            val id  = RecommendBody(movieId.toString())
+            val responseBody = mlApiService.getGenre(id)
+            val responseString = responseBody.string()
+            Log.d("MovieRepository", "getIdGenres response: $responseString")
+
+            val gson = Gson()
+            val recomen =  gson.fromJson(responseString, MLGResponse::class.java)
+            println("rec $recomen")
+            val response = listOf(recomen.rec1, recomen.rec2, recomen.rec3, recomen.rec4, recomen.rec5)
+            println("res $response")
+            MLSResponse(response)
+        } catch (e: HttpException) {
+            // HTTP error
+            Log.e("MovieRepository", "HTTP error: ${e.code()} - ${e.message()}", e)
+            null
+        } catch (e: Exception) {
+            // Other errors
+            Log.e("MovieRepository", "Error fetching genres: ${e.message}", e)
+            null
+        }
+    }
+
 
     companion object {
         @Volatile

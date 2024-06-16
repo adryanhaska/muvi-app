@@ -17,6 +17,7 @@ import android.webkit.WebView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.muvi_app.R
+import com.example.muvi_app.data.adapter.SimilarMoviesAdapter
 import com.example.muvi_app.data.response.Movie
 import com.example.muvi_app.repository.MovieRepository
 import com.example.muvi_app.ui.main.MoviesAdapter
@@ -28,6 +29,7 @@ class MovieDetailActivity : AppCompatActivity() {
     private val viewModel by viewModels<MovieDetailViewModel> { ViewModelFactory.getInstance(this) }
 
     private lateinit var moviesAdapter: MoviesAdapter
+    private lateinit var moviesAdapterGenre: MoviesAdapter
     private lateinit var castPagerAdapter: CastPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +55,20 @@ class MovieDetailActivity : AppCompatActivity() {
         recyclerViewPopular.apply {
             layoutManager = LinearLayoutManager(this@MovieDetailActivity, LinearLayoutManager.HORIZONTAL, false)
             adapter = moviesAdapter
+        }
+
+        val recyclerViewGenre = findViewById<RecyclerView>(R.id.rvSimilarGenre)
+        moviesAdapterGenre = MoviesAdapter()
+        moviesAdapterGenre.setOnItemClickCallback(object : MoviesAdapter.OnItemClickCallback {
+            override fun onItemClicked(data: Movie) {
+                val intent = Intent(this@MovieDetailActivity, MovieDetailActivity::class.java)
+                intent.putExtra("movie_id", data.id)
+                startActivity(intent)
+            }
+        })
+        recyclerViewGenre.apply {
+            layoutManager = LinearLayoutManager(this@MovieDetailActivity, LinearLayoutManager.HORIZONTAL, false)
+            adapter = moviesAdapterGenre
         }
     }
 
@@ -91,11 +107,16 @@ class MovieDetailActivity : AppCompatActivity() {
             finish()
         } else {
             viewModel.getMovieML(movieId)
+            viewModel.getMovieMLG(movieId)
         }
 
 
         viewModel.listId.observe(this, Observer {ids ->
             println("idsss ${ids?.recommendations}")
+        })
+
+        viewModel.listIdGenre.observe(this, Observer {ids ->
+            println("idsGG ${ids?.recommendations}")
         })
 
         viewModel.movieDetail.observe(this, Observer { movieDetail ->
@@ -138,10 +159,39 @@ class MovieDetailActivity : AppCompatActivity() {
             }
         })
 
+        viewModel.listIdGenre.observe(this, Observer { ids ->
+            val dum = arrayOf("574074", "779047", "1084244", "976573", "897192")
+            ids?.recommendations?.let { recommendations ->
+                println("ids: $recommendations")
+
+                try {
+                    // Get the recommended movies once the session is available
+                    if (recommendations.isNotEmpty()) {
+                        viewModel.getMovieRecommendGenre(recommendations.toTypedArray())
+                    } else {
+                        // Handle case where recommendations list is empty
+                        viewModel.getMovieRecommendGenre(dum)
+                    }
+                } catch (e: Exception) {
+                    Log.e("Error fetching recommendations", e.toString())
+                    viewModel.getMovieRecommendGenre(dum)
+                }
+            } ?: run {
+                // Handle case where ids is null
+                viewModel.getMovieRecommendGenre(dum)
+            }
+        })
+
         moviesAdapter = MoviesAdapter()
+        moviesAdapterGenre = MoviesAdapter()
 
         viewModel.movies.observe(this, Observer { response ->
             moviesAdapter.submitList(response.movies as List<Movie>)
+        })
+
+        viewModel.moviesGenre.observe(this, Observer { response ->
+            println("tersbumit $response")
+            moviesAdapterGenre.submitList(response.movies as List<Movie>)
         })
 
         viewModel.isLoading.observe(this, Observer { isLoading ->

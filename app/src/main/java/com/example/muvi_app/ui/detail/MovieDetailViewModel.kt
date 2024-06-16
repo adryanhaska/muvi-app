@@ -29,8 +29,14 @@ class MovieDetailViewModel(
     private val _movies = MutableLiveData<MultMovieResponse>()
     val movies: LiveData<MultMovieResponse> = _movies
 
+    private val _moviesGenre = MutableLiveData<MultMovieResponse>()
+    val moviesGenre: LiveData<MultMovieResponse> = _moviesGenre
+
     private val _listId = MutableLiveData<MLSResponse?>()
     val listId: LiveData<MLSResponse?> = _listId
+
+    private val _listIdGenre = MutableLiveData<MLSResponse?>()
+    val listIdGenre: LiveData<MLSResponse?> = _listIdGenre
 
     fun getSession(): LiveData<UserModel> = userRepository.getSession().asLiveData()
 
@@ -53,6 +59,7 @@ class MovieDetailViewModel(
             try {
                 _isLoading.value = true
                 val response = movieRepository.getIdSynopsys(movieId)
+                println("GGS $response")
                 _listId.value = response
                 _isLoading.value = false
             } catch (e: Exception) {
@@ -67,11 +74,43 @@ class MovieDetailViewModel(
         }
     }
 
+    fun getMovieMLG(movieId: Int){
+        viewModelScope.launch {
+            try {
+                _isLoading.value = true
+                val response = movieRepository.getIdGenres(movieId)
+                println("GGR $response")
+                _listIdGenre.value = response
+                _isLoading.value = false
+            } catch (e: Exception) {
+                _listIdGenre.value = MLSResponse(listOf(
+                    "574074",
+                    "779047",
+                    "1084244",
+                    "976573",
+                    "897192"))
+                _isLoading.value = false
+                _error.value = e.message ?: "Unknown error"
+            }
+        }
+    }
+
     fun getMovieRecommend(movieIds: Array<String>) {
         viewModelScope.launch {
             try {
                 val response = movieRepository.getMultMovie(movieIds)
                 _movies.value = response
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun getMovieRecommendGenre(movieIds: Array<String>) {
+        viewModelScope.launch {
+            try {
+                val response = movieRepository.getMultMovie(movieIds)
+                _moviesGenre.value = response
             } catch (e: Exception) {
                 e.printStackTrace()
             }
