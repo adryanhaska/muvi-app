@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.muvi_app.data.response.Movie
-import com.example.muvi_app.data.response.Profile
-import com.example.muvi_app.data.response.UserResponse
+import com.example.muvi_app.data.response.UserProfile
+
 import com.example.muvi_app.data.utils.GenericDiffUtilCallback
 import com.example.muvi_app.databinding.ItemProfileResultBinding
 import com.example.muvi_app.databinding.ItemSearchLayoutBinding
@@ -35,7 +35,7 @@ class SearchAdapter(private val onItemClickCallback: OnItemClickCallback) : Recy
     override fun getItemViewType(position: Int): Int {
         return when (listItems[position]) {
             is Movie -> TYPE_MOVIE
-            is Profile -> TYPE_PERSON
+            is UserProfile -> TYPE_PERSON
             else -> throw IllegalArgumentException("Invalid type of data $position")
         }
     }
@@ -57,7 +57,7 @@ class SearchAdapter(private val onItemClickCallback: OnItemClickCallback) : Recy
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is MovieViewHolder -> holder.bind(listItems[position] as Movie)
-            is PersonViewHolder -> holder.bind(listItems[position] as Profile)
+            is PersonViewHolder -> holder.bind(listItems[position] as UserProfile)
         }
     }
 
@@ -93,7 +93,7 @@ class SearchAdapter(private val onItemClickCallback: OnItemClickCallback) : Recy
             }
         }
 
-        fun bind(profile: Profile) {
+        fun bind(profile: UserProfile) {
             with(binding) {
                 textName.text = profile.name
                 textUsername.text = profile.username

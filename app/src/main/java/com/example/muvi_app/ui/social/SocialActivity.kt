@@ -7,21 +7,28 @@ import android.view.View
 import android.view.Window
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.example.muvi_app.data.response.Profile
-import com.example.muvi_app.data.response.UserResponse
+import androidx.lifecycle.lifecycleScope
+import com.example.muvi_app.data.pref.UserModel
+import com.example.muvi_app.data.pref.UserPreference
+import com.example.muvi_app.data.pref.dataStore
 import com.example.muvi_app.databinding.ActivitySocialBinding
+import com.example.muvi_app.repository.UserRepository
 import com.example.muvi_app.ui.ViewModelFactory
 import com.example.muvi_app.ui.main.MainActivity
 import com.example.muvi_app.ui.search.SearchActivity
 import com.example.muvi_app.ui.settings.SettingsActivity
-import com.example.muvi_app.ui.welcome.WelcomeActivity
+import kotlinx.coroutines.launch
 
 class SocialActivity : AppCompatActivity() {
 
     private val viewModel by viewModels<SocialViewModel> { ViewModelFactory.getInstance(this) }
     private lateinit var binding: ActivitySocialBinding
+    private lateinit var userRepository: UserRepository
+    private var loggedInUserId: String? = null
+    private var targetUserId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,26 +36,77 @@ class SocialActivity : AppCompatActivity() {
         window.requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
         setContentView(binding.root)
 
-        setupObservers()
+        val userPreference = UserPreference.getInstance(this.dataStore)
+        userRepository = UserRepository(userPreference)
+
         setupView()
+        fetchLoggedInUserDetails()
     }
 
-    private fun setupObservers() {
-        viewModel.getSession().observe(this) { user ->
-            if (!user.isLogin) {
-                navigateToWelcomeActivity()
+    private fun fetchLoggedInUserDetails() {
+        lifecycleScope.launch {
+            loggedInUserId = userRepository.getUserId()
+            loggedInUserId?.let {
+                setupUserProfile()
             }
         }
     }
 
-    private fun setupUserProfile(user: Profile) {
-        binding.textName.text = user.name
-        binding.username.text = "@${user.username}"
-        binding.followingCount.text = user.following.toString()
+    private fun setupUserProfile() {
+        targetUserId = intent.getStringExtra("USER_ID")
+        targetUserId?.let { userId ->
+            viewModel.getUserDetail(userId)
+            viewModel.getSession().observe(this) { loggedInUser ->
+                loggedInUser?.let {
+                    viewModel.getLoggedInUserDetail(it.id)
+                }
+            }
+        }
 
-        // Logic for follow/unfollow buttons visibility based on user's relationship
-        binding.followButton.visibility = View.VISIBLE // or View.GONE based on logic
-        binding.unfollowButton.visibility = View.GONE // or View.VISIBLE based on logic
+        viewModel.userDetail.observe(this) { userDetail ->
+            userDetail?.let {
+                binding.textName.text = userDetail.name
+                binding.username.text = "@${userDetail.username}"
+                binding.followingCount.text = userDetail.following?.size.toString()
+            }
+        }
+
+        viewModel.loggedInUserDetail.observe(this) { loggedInUserDetail ->
+            loggedInUserDetail?.let {
+                val isFollowing = it.following?.contains(targetUserId) ?: false
+                if (isFollowing) {
+                    showUnfollowButton()
+                } else {
+                    showFollowButton()
+                }
+            }
+        }
+
+        binding.followButton.setOnClickListener {
+            targetUserId?.let { userId ->
+                viewModel.followUser(userId) { result ->
+                    result.onSuccess {
+                        Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+                        showUnfollowButton()
+                    }.onFailure {
+                        Toast.makeText(this, "Follow failed: ${it.message}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+
+        binding.unfollowButton.setOnClickListener {
+            targetUserId?.let { userId ->
+                viewModel.unfollowUser(userId) { result ->
+                    result.onSuccess {
+                        Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+                        showFollowButton()
+                    }.onFailure {
+                        Toast.makeText(this, "Unfollow failed: ${it.message}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
     }
 
     private fun setupBottomAppBar() {
@@ -63,7 +121,7 @@ class SocialActivity : AppCompatActivity() {
         }
 
         binding.socialButton.setOnClickListener {
-            //do nothing
+            // do nothing
         }
 
         binding.settingsButton.setOnClickListener {
@@ -72,9 +130,23 @@ class SocialActivity : AppCompatActivity() {
         }
     }
 
+    private fun showFollowButton() {
+        binding.followButton.visibility = View.VISIBLE
+        binding.unfollowButton.visibility = View.GONE
+    }
+
+    private fun showUnfollowButton() {
+        binding.followButton.visibility = View.GONE
+        binding.unfollowButton.visibility = View.VISIBLE
+    }
+
     private fun setupView() {
         setupFullscreenMode()
         setupBottomAppBar()
+
+        binding.backButton.setOnClickListener {
+            onBackPressed()
+        }
     }
 
     private fun setupFullscreenMode() {
@@ -88,11 +160,4 @@ class SocialActivity : AppCompatActivity() {
             )
         }
     }
-
-
-    private fun navigateToWelcomeActivity() {
-        startActivity(Intent(this, WelcomeActivity::class.java))
-        finish()
-    }
-
 }

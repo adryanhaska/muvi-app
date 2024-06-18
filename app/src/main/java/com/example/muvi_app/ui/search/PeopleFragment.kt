@@ -2,15 +2,13 @@ package com.example.muvi_app.ui.search
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.muvi_app.data.adapter.SearchAdapter
-import com.example.muvi_app.data.response.Profile
-import com.example.muvi_app.data.response.UserResponse
+import com.example.muvi_app.data.response.UserProfile
 import com.example.muvi_app.databinding.FragmentPeopleBinding
 import com.example.muvi_app.ui.social.SocialActivity
 
@@ -37,7 +35,7 @@ class PeopleFragment : Fragment() {
     private fun setupRecyclerView() {
         searchAdapter = SearchAdapter(object : SearchAdapter.OnItemClickCallback {
             override fun onItemClicked(data: Any) {
-                if (data is Profile) {
+                if (data is UserProfile) {
                     val intent = Intent(requireContext(), SocialActivity::class.java).apply {
                         putExtra("USER_ID", data.id)
                     }

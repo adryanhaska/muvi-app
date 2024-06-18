@@ -1,14 +1,11 @@
 package com.example.muvi_app.ui.search
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.muvi_app.data.pref.UserPreference
 import com.example.muvi_app.data.response.Movie
-import com.example.muvi_app.data.response.Profile
-import com.example.muvi_app.data.response.UserResponse
+import com.example.muvi_app.data.response.UserProfile
 import com.example.muvi_app.repository.MovieRepository
 import com.example.muvi_app.repository.UserRepository
 import kotlinx.coroutines.launch
@@ -21,8 +18,8 @@ class SearchViewModel(
     private val _movieList = MutableLiveData<List<Movie>>()
     val movieList: LiveData<List<Movie>> = _movieList
 
-    private val _peopleList = MutableLiveData<List<Profile>?>()
-    val peopleList: MutableLiveData<List<Profile>?> = _peopleList
+    private val _peopleList = MutableLiveData<List<UserProfile>?>()
+    val peopleList: MutableLiveData<List<UserProfile>?> = _peopleList
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -46,7 +43,7 @@ class SearchViewModel(
             try {
                 _isLoading.value = true
                 val users = userRepository.getUser(username)
-                _peopleList.value = users as List<Profile>?
+                _peopleList.value = users as List<UserProfile>?
             } catch (e: Exception) {
                 handleCallError()
             } finally {

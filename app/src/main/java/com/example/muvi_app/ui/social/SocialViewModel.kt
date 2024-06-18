@@ -1,24 +1,97 @@
 package com.example.muvi_app.ui.social
 
+import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.muvi_app.data.pref.UserModel
+import com.example.muvi_app.data.response.MovieDetailResponse
+import com.example.muvi_app.data.response.MultMovieResponse
+import com.example.muvi_app.data.response.UserDetailResponse
 import com.example.muvi_app.repository.MovieRepository
 import com.example.muvi_app.repository.UserRepository
 import kotlinx.coroutines.launch
 
-class SocialViewModel (
+class SocialViewModel(
     private val userRepository: UserRepository,
     movieRepository: MovieRepository
 ) : ViewModel() {
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
+    private val _error = MutableLiveData<String>()
+    val error: LiveData<String> = _error
+
+    private val _userDetail = MutableLiveData<UserDetailResponse>()
+    val userDetail: LiveData<UserDetailResponse> = _userDetail
+
+    private val _loggedInUserDetail = MutableLiveData<UserDetailResponse>()
+    val loggedInUserDetail: LiveData<UserDetailResponse> = _loggedInUserDetail
+
     fun getSession(): LiveData<UserModel> = userRepository.getSession().asLiveData()
 
-    fun logout() {
+    fun getUserDetail(userId: String) {
         viewModelScope.launch {
-            userRepository.logout()
+            try {
+                _isLoading.value = true
+                val response = userRepository.getUserDetail(userId)
+                _userDetail.value = response
+                _isLoading.value = false
+            } catch (e: Exception) {
+                _isLoading.value = false
+                _error.value = e.message ?: "Unknown error"
+            }
+        }
+    }
+
+    fun getLoggedInUserDetail(userId: String) {
+        viewModelScope.launch {
+            try {
+                _isLoading.value = true
+                val response = userRepository.getUserDetail(userId)
+                _loggedInUserDetail.value = response
+                _isLoading.value = false
+            } catch (e: Exception) {
+                _isLoading.value = false
+                _error.value = e.message ?: "Unknown error"
+            }
+        }
+    }
+
+    fun followUser(userId: String, onComplete: (Result<String>) -> Unit) {
+        viewModelScope.launch {
+            try {
+                val response = userRepository.followUser(userId)
+                if (response.isSuccessful) {
+                    val message = response.body()?.message ?: "Friend added successfully"
+                    onComplete(Result.success(message))
+                } else {
+                    val errorMessage = "Failed to follow user: ${response.message()}"
+                    onComplete(Result.failure(Exception(errorMessage)))
+                }
+            } catch (e: Exception) {
+                onComplete(Result.failure(e))
+            }
+        }
+    }
+
+    fun unfollowUser(userId: String, onComplete: (Result<String>) -> Unit) {
+        viewModelScope.launch {
+            try {
+                val response = userRepository.unfollowUser(userId)
+                if (response.isSuccessful) {
+                    val message = response.body()?.message ?: "Friend removed successfully"
+                    onComplete(Result.success(message))
+                } else {
+                    val errorMessage = "Failed to unfollow user: ${response.message()}"
+                    onComplete(Result.failure(Exception(errorMessage)))
+                }
+            } catch (e: Exception) {
+                onComplete(Result.failure(e))
+            }
         }
     }
 

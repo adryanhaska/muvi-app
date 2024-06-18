@@ -1,15 +1,25 @@
 package com.example.muvi_app.data.network
 
+import com.example.muvi_app.data.response.FollowResponse
 import com.example.muvi_app.data.response.LoginResponse
 import com.example.muvi_app.data.response.MLCResponse
 import com.example.muvi_app.data.response.MLSResponse
 import com.example.muvi_app.data.response.MovieDetailResponse
 import com.example.muvi_app.data.response.MultMovieResponse
-import com.example.muvi_app.data.response.Profile
 import com.example.muvi_app.data.response.RegisterResponse
 import com.example.muvi_app.data.response.SearchMovieResponse
-import com.example.muvi_app.data.response.UserResponse
-import retrofit2.http.*
+import com.example.muvi_app.data.response.UnfollowResponse
+import com.example.muvi_app.data.response.UserDetailResponse
+import com.example.muvi_app.data.response.UserProfile
+import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 
 interface ApiService {
@@ -67,7 +77,33 @@ interface ApiService {
     suspend fun getUser(
         @Header("Authorization") token: String,
         @Query("username") username: String
-    ): List<Profile>
+    ): List<UserProfile>
+
+    @GET("user/{user_id}")
+    suspend fun getUserDetail(
+        @Header("Authorization")
+        token: String,
+
+        @Path("user_id") userId: String
+    ): UserDetailResponse
+
+    @PUT("user/{user_id}/friend")
+    suspend fun followUser(
+        @Header("Authorization")
+        token: String,
+
+        @Path("user_id")
+        userId: String
+    ): Response<FollowResponse>
+
+    @DELETE("user/{user_id}/friend")
+    suspend fun unfollowUser(
+        @Header("Authorization")
+        token: String,
+
+        @Path("user_id")
+        userId: String
+    ): Response<UnfollowResponse>
 
     @POST("movie/id")
     suspend fun getMultMovie(
@@ -89,4 +125,5 @@ interface ApiService {
     suspend fun getColab(
         @Query("id") id: String
     ): MLCResponse
+
 }
