@@ -9,6 +9,7 @@ import com.example.muvi_app.data.pref.UserModel
 import com.example.muvi_app.data.response.MLSResponse
 import com.example.muvi_app.data.response.MovieDetailResponse
 import com.example.muvi_app.data.response.MultMovieResponse
+import com.example.muvi_app.data.response.UserDetailResponse
 import com.example.muvi_app.repository.MovieRepository
 import com.example.muvi_app.repository.UserRepository
 import kotlinx.coroutines.launch
@@ -38,6 +39,18 @@ class MovieDetailViewModel(
     private val _listIdGenre = MutableLiveData<MLSResponse?>()
     val listIdGenre: LiveData<MLSResponse?> = _listIdGenre
 
+    private val _userDetail = MutableLiveData<UserDetailResponse>()
+    val userDetail: LiveData<UserDetailResponse> = _userDetail
+
+    private val _isMovieLiked = MutableLiveData<Boolean>()
+    val isMovieLiked: LiveData<Boolean> = _isMovieLiked
+
+    private val _likeSuccess = MutableLiveData<Boolean>()
+    val likeSuccess: LiveData<Boolean> = _likeSuccess
+
+    private val _unlikeSuccess = MutableLiveData<Boolean>()
+    val unlikeSuccess: LiveData<Boolean> = _unlikeSuccess
+
     fun getSession(): LiveData<UserModel> = userRepository.getSession().asLiveData()
 
     fun getMovieDetail(movieId: Int) {
@@ -50,6 +63,56 @@ class MovieDetailViewModel(
             } catch (e: Exception) {
                 _isLoading.value = false
                 _error.value = e.message ?: "Unknown error"
+            }
+        }
+    }
+
+    fun checkIfMovieIsLiked(movieId: Int?) {
+        viewModelScope.launch {
+            try {
+                val userId = userRepository.getUserId()
+                if (userId != null && movieId != null) {
+                    val userDetails = userRepository.getUserDetail(userId)
+                    _userDetail.value = userDetails
+                    _isMovieLiked.value = userDetails.likes?.contains(movieId) == true
+                } else {
+                    _isMovieLiked.value = false
+                }
+            } catch (e: Exception) {
+                _error.value = e.message
+                _isMovieLiked.value = false
+            }
+        }
+    }
+
+    fun likeMovie(movieId: Int) {
+        viewModelScope.launch {
+            try {
+                val response = movieRepository.likeMovie(movieId)
+                if (response.isSuccessful) {
+                    _likeSuccess.value = true
+                    checkIfMovieIsLiked(movieId) // Refresh like state
+                } else {
+                    _likeSuccess.value = false
+                }
+            } catch (e: Exception) {
+                _likeSuccess.value = false
+            }
+        }
+    }
+
+    fun unlikeMovie(movieId: Int) {
+        viewModelScope.launch {
+            try {
+                val response = movieRepository.unlikeMovie(movieId)
+                if (response.isSuccessful) {
+                    _unlikeSuccess.value = true
+                    checkIfMovieIsLiked(movieId) // Refresh like state
+                } else {
+                    _unlikeSuccess.value = false
+                }
+            } catch (e: Exception) {
+                _unlikeSuccess.value = false
             }
         }
     }

@@ -5,6 +5,8 @@ import com.example.muvi_app.data.network.ApiConfig
 import com.example.muvi_app.data.network.ApiService
 import com.example.muvi_app.data.network.ApiServiceML.RecommendBody
 import com.example.muvi_app.data.pref.UserPreference
+import com.example.muvi_app.data.response.FollowResponse
+import com.example.muvi_app.data.response.LikeResponse
 import com.example.muvi_app.data.response.MLCResponse
 import com.example.muvi_app.data.response.MLGResponse
 import com.example.muvi_app.data.response.MLSResponse
@@ -14,6 +16,7 @@ import com.example.muvi_app.data.response.MultMovieResponse
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.first
 import retrofit2.HttpException
+import retrofit2.Response
 
 class MovieRepository(private val userPreference: UserPreference) {
 
@@ -62,6 +65,16 @@ class MovieRepository(private val userPreference: UserPreference) {
 
     suspend fun getIdCollab(userId: String): MLCResponse {
         return mlApiService.getColab(userId)
+    }
+
+    suspend fun likeMovie(movieId: Int): Response<LikeResponse> {
+        val token = userPreference.getToken()
+        return movieApiService.likeMovie("Bearer $token", movieId)
+    }
+
+    suspend fun unlikeMovie(movieId: Int): Response<LikeResponse> {
+        val token = userPreference.getToken()
+        return movieApiService.unlikeMovie("Bearer $token", movieId)
     }
 
     suspend fun getIdSynopsys(movieId: Int): MLSResponse? {

@@ -1,26 +1,21 @@
 package com.example.muvi_app.ui.detail
 
-import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import com.bumptech.glide.Glide
-import com.example.muvi_app.data.adapter.CastPagerAdapter
-import com.example.muvi_app.databinding.ActivityDetailBinding
-import com.example.muvi_app.ui.ViewModelFactory
-import android.webkit.WebView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.muvi_app.R
-import com.example.muvi_app.data.adapter.SimilarMoviesAdapter
+import com.example.muvi_app.data.adapter.CastPagerAdapter
+import com.example.muvi_app.data.adapter.MoviesAdapter
 import com.example.muvi_app.data.response.Movie
-import com.example.muvi_app.repository.MovieRepository
-import com.example.muvi_app.ui.main.MoviesAdapter
+import com.example.muvi_app.databinding.ActivityDetailBinding
+import com.example.muvi_app.ui.ViewModelFactory
 import com.example.muvi_app.ui.webView.WebViewActivity
 
 class MovieDetailActivity : AppCompatActivity() {
@@ -40,6 +35,18 @@ class MovieDetailActivity : AppCompatActivity() {
         setupUI()
         observeViewModel()
         setupRecyclerView()
+
+        val movieId = intent.getIntExtra("movie_id", -1)
+        if (movieId == -1) {
+            Toast.makeText(this, "Movie ID not found", Toast.LENGTH_SHORT).show()
+            finish()
+        } else {
+            Log.d("MovieDetailActivity", "Movie ID: $movieId")
+            viewModel.getMovieDetail(movieId)
+            viewModel.getMovieML(movieId)
+            viewModel.getMovieMLG(movieId)
+            viewModel.checkIfMovieIsLiked(movieId)
+        }
     }
 
     private fun setupRecyclerView() {
@@ -76,6 +83,7 @@ class MovieDetailActivity : AppCompatActivity() {
         // Setup adapters for ViewPager2 and RecyclerView
         castPagerAdapter = CastPagerAdapter()
         binding.castViewPager.adapter = castPagerAdapter
+
         binding.watchTrailerButton.setOnClickListener {
             println("url ${viewModel.movieDetail.value?.trailerUrl}")
             viewModel.movieDetail.value?.trailerUrl?.let { url ->
@@ -91,48 +99,53 @@ class MovieDetailActivity : AppCompatActivity() {
             }
         }
 
+        binding.addToFavoriteButton.setOnClickListener {
+            val movieId = viewModel.movieDetail.value?.id ?: return@setOnClickListener
+            if (viewModel.isMovieLiked.value == true) {
+                viewModel.unlikeMovie(movieId)
+            } else {
+                viewModel.likeMovie(movieId)
+            }
+        }
     }
 
     private fun observeViewModel() {
-        val movieId = intent.getIntExtra("movie_id", -1)
-        if (movieId == -1) {
-            Toast.makeText(this, "Movie ID not found", Toast.LENGTH_SHORT).show()
-            finish()
-        } else {
-            viewModel.getMovieDetail(movieId)
-        }
-
-        if (movieId == -1) {
-            Toast.makeText(this, "Movie ID not found", Toast.LENGTH_SHORT).show()
-            finish()
-        } else {
-            viewModel.getMovieML(movieId)
-            viewModel.getMovieMLG(movieId)
-        }
-
-
-        viewModel.listId.observe(this, Observer {ids ->
-            println("idsss ${ids?.recommendations}")
-        })
-
-        viewModel.listIdGenre.observe(this, Observer {ids ->
-            println("idsGG ${ids?.recommendations}")
-        })
-
         viewModel.movieDetail.observe(this, Observer { movieDetail ->
             // Update UI with movie detail data
             binding.movieTitle.text = movieDetail.title
             binding.movieDescription.text = movieDetail.overview
             binding.movieDuration.text = "${movieDetail.runtime} min" // Example for duration
-
             binding.movieGenre.text = movieDetail.genres?.joinToString(", ") { it?.name ?: "" }
             Glide.with(this)
                 .load("https://image.tmdb.org/t/p/original${movieDetail.posterPath}")
                 .into(binding.moviePoster)
 
-
             movieDetail.credits?.cast?.let {
                 castPagerAdapter.submitList(it)
+            }
+        })
+
+        viewModel.isMovieLiked.observe(this, Observer { isLiked ->
+            binding.addToFavoriteButton.text = if (isLiked) {
+                getString(R.string.remove_favorite)
+            } else {
+                getString(R.string.add_to_favorite)
+            }
+        })
+
+        viewModel.likeSuccess.observe(this, Observer { success ->
+            if (success) {
+                Toast.makeText(this, "Movie liked successfully", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Failed to like movie", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        viewModel.unlikeSuccess.observe(this, Observer { success ->
+            if (success) {
+                Toast.makeText(this, "Movie unliked successfully", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Failed to unlike movie", Toast.LENGTH_SHORT).show()
             }
         })
 
@@ -179,9 +192,6 @@ class MovieDetailActivity : AppCompatActivity() {
                 viewModel.getMovieRecommendGenre(dum)
             }
         })
-
-        moviesAdapter = MoviesAdapter()
-        moviesAdapterGenre = MoviesAdapter()
 
         viewModel.movies.observe(this, Observer { response ->
             moviesAdapter.submitList(response.movies as List<Movie>)

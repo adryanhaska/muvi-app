@@ -1,6 +1,7 @@
 package com.example.muvi_app.data.network
 
 import com.example.muvi_app.data.response.FollowResponse
+import com.example.muvi_app.data.response.LikeResponse
 import com.example.muvi_app.data.response.LoginResponse
 import com.example.muvi_app.data.response.MLCResponse
 import com.example.muvi_app.data.response.MLSResponse
@@ -104,6 +105,24 @@ interface ApiService {
         @Path("user_id")
         userId: String
     ): Response<UnfollowResponse>
+
+    @POST("movie/id/{movie_id}/like")
+    suspend fun likeMovie(
+        @Header("Authorization")
+        token: String,
+
+        @Path("movie_id")
+        movieId: Int
+    ): Response<LikeResponse>
+
+    @DELETE("movie/id/{movie_id}/like")
+    suspend fun unlikeMovie(
+        @Header("Authorization")
+        token: String,
+
+        @Path("movie_id")
+        movieId: Int
+    ): Response<LikeResponse>
 
     @POST("movie/id")
     suspend fun getMultMovie(
