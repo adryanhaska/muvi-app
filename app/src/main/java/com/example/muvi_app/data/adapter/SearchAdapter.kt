@@ -76,10 +76,38 @@ class SearchAdapter(private val onItemClickCallback: OnItemClickCallback) : Recy
             with(binding) {
                 textTitle.text = movie.title
                 textCast.text = movie.releaseDate
-                genre.text = movie.genreIds.toString()
+                val genreNames = movie.genreIds?.toGenreNames()?.joinToString(", ")
+                genre.text = genreNames
                 Glide.with(itemView.context)
                     .load("https://image.tmdb.org/t/p/original${movie.posterPath}")
                     .into(imagePoster)
+            }
+        }
+    }
+
+    fun List<Int?>.toGenreNames(): List<String> {
+        return this.mapNotNull { id ->
+            when (id) {
+                28 -> "Action"
+                12 -> "Adventure"
+                16 -> "Animation"
+                35 -> "Comedy"
+                80 -> "Crime"
+                99 -> "Documentary"
+                18 -> "Drama"
+                10751 -> "Family"
+                14 -> "Fantasy"
+                36 -> "History"
+                27 -> "Horror"
+                10402 -> "Music"
+                9648 -> "Mystery"
+                10749 -> "Romance"
+                878 -> "Science Fiction"
+                10770 -> "TV Movie"
+                53 -> "Thriller"
+                10752 -> "War"
+                37 -> "Western"
+                else -> null
             }
         }
     }
