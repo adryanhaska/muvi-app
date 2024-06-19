@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/favoriteItemImage"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         tools:src="@tools:sample/backgrounds/scenic"
         android:contentDescription="Favorite Item Poster"
         app:layout_constraintTop_toTopOf="parent"
@@ -47,13 +47,6 @@
             android:textColor="#AAAAAA"
             android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/favoriteItemGenre"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/genre"
-            android:textColor="#AAAAAA"
-            android:textSize="16sp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

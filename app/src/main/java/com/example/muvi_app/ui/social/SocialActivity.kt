@@ -11,12 +11,15 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.example.muvi_app.data.pref.UserModel
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.muvi_app.data.adapter.FavMoviesAdapter
 import com.example.muvi_app.data.pref.UserPreference
 import com.example.muvi_app.data.pref.dataStore
+import com.example.muvi_app.data.response.Movie
 import com.example.muvi_app.databinding.ActivitySocialBinding
 import com.example.muvi_app.repository.UserRepository
 import com.example.muvi_app.ui.ViewModelFactory
+import com.example.muvi_app.ui.detail.MovieDetailActivity
 import com.example.muvi_app.ui.main.MainActivity
 import com.example.muvi_app.ui.search.SearchActivity
 import com.example.muvi_app.ui.settings.SettingsActivity
@@ -41,6 +44,26 @@ class SocialActivity : AppCompatActivity() {
 
         setupView()
         fetchLoggedInUserDetails()
+        binding.rvFavorites.layoutManager = LinearLayoutManager(this)
+
+        viewModel.favoriteMovies.observe(this) { movies ->
+            val adapter = movies?.let {
+                FavMoviesAdapter(it) { movie ->
+                    val intent = Intent(this, MovieDetailActivity::class.java)
+                    intent.putExtra("movie_id", movie.id)
+                    startActivity(intent)
+                }
+            }
+            binding.rvFavorites.adapter = adapter
+        }
+
+        viewModel.error.observe(this) { errorMessage ->
+            Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
+        }
+
+        viewModel.isLoading.observe(this) { isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
     }
 
     private fun fetchLoggedInUserDetails() {
@@ -68,6 +91,12 @@ class SocialActivity : AppCompatActivity() {
                 binding.textName.text = userDetail.name
                 binding.username.text = "@${userDetail.username}"
                 binding.followingCount.text = userDetail.following?.size.toString()
+            }
+        }
+
+        viewModel.favoriteMovies.observe(this) { favoriteMovies ->
+            favoriteMovies?.let {
+                displayFavoriteMovies(it)
             }
         }
 
@@ -159,5 +188,14 @@ class SocialActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
         }
+    }
+
+    private fun displayFavoriteMovies(movies: List<Movie>) {
+        val adapter = FavMoviesAdapter(movies) { movie ->
+            val intent = Intent(this, MovieDetailActivity::class.java)
+            intent.putExtra("movie_id", movie.id)
+            startActivity(intent)
+        }
+        binding.rvFavorites.adapter = adapter
     }
 }
