@@ -68,18 +68,13 @@ class MovieRepository(private val userPreference: UserPreference) {
         return try {
             val responseBody = mlApiService.getSynopsys(movieId)
             val responseString = responseBody.string()
-            Log.d("MovieRepository", "getIdSynopsys response: $responseString")
 
             val gson = Gson()
             val response = gson.fromJson(responseString, MLSResponse::class.java)
             response
         } catch (e: HttpException) {
-            // HTTP error
-            Log.e("MovieRepository", "HTTP error: ${e.code()} - ${e.message()}", e)
             null
         } catch (e: Exception) {
-            // Other errors
-            Log.e("MovieRepository", "Error fetching synopsis: ${e.message}", e)
             null
         }
     }
@@ -89,7 +84,6 @@ class MovieRepository(private val userPreference: UserPreference) {
             val id  = RecommendBody(movieId.toString())
             val responseBody = mlApiService.getGenre(id)
             val responseString = responseBody.string()
-            Log.d("MovieRepository", "getIdGenres response: $responseString")
 
             val gson = Gson()
             val recomen =  gson.fromJson(responseString, MLGResponse::class.java)
@@ -98,12 +92,8 @@ class MovieRepository(private val userPreference: UserPreference) {
             println("res $response")
             MLSResponse(response)
         } catch (e: HttpException) {
-            // HTTP error
-            Log.e("MovieRepository", "HTTP error: ${e.code()} - ${e.message()}", e)
             null
         } catch (e: Exception) {
-            // Other errors
-            Log.e("MovieRepository", "Error fetching genres: ${e.message}", e)
             null
         }
     }

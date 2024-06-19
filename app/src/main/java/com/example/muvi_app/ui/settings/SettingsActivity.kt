@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.muvi_app.databinding.ActivitySettingsBinding
 import com.example.muvi_app.ui.ViewModelFactory
 import com.example.muvi_app.ui.main.MainActivity
+import com.example.muvi_app.ui.profile.ProfileActivity
 import com.example.muvi_app.ui.search.SearchActivity
 import com.example.muvi_app.ui.social.SocialActivity
 import com.example.muvi_app.ui.welcome.WelcomeActivity
@@ -51,7 +52,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         binding.socialButton.setOnClickListener {
-            startActivity(Intent(this, SocialActivity::class.java))
+            startActivity(Intent(this, ProfileActivity::class.java))
             finish()
         }
 

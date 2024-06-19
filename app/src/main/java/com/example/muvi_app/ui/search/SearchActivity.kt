@@ -18,6 +18,7 @@ import com.example.muvi_app.databinding.ActivitySearchBinding
 import com.example.muvi_app.repository.MovieRepository
 import com.example.muvi_app.repository.UserRepository
 import com.example.muvi_app.ui.main.MainActivity
+import com.example.muvi_app.ui.profile.ProfileActivity
 import com.example.muvi_app.ui.settings.SettingsActivity
 import com.example.muvi_app.ui.social.SocialActivity
 import com.google.android.material.tabs.TabLayout
@@ -128,7 +129,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         binding.socialButton.setOnClickListener {
-            startActivity(Intent(this, SocialActivity::class.java))
+            startActivity(Intent(this, ProfileActivity::class.java))
             finish()
         }
 

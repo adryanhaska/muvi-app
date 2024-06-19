@@ -24,6 +24,7 @@ import com.example.muvi_app.ui.settings.SettingsActivity
 import com.example.muvi_app.ui.social.SocialActivity
 import com.example.muvi_app.databinding.ActivityMainBinding
 import com.example.muvi_app.ui.detail.MovieDetailActivity
+import com.example.muvi_app.ui.profile.ProfileActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -158,7 +159,6 @@ class MainActivity : AppCompatActivity() {
                         viewModel.getMovieRecommend(dum)
                     }
                 } catch (e: Exception) {
-                    Log.e("Error fetching recommendations", e.toString())
                     viewModel.getMovieRecommend(dum)
                 }
             } ?: run {
@@ -179,7 +179,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.socialButton.setOnClickListener {
-            startActivity(Intent(this, SocialActivity::class.java))
+            startActivity(Intent(this, ProfileActivity::class.java))
             finish()
         }
 

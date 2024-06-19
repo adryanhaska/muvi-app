@@ -104,25 +104,12 @@
         </LinearLayout>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/followButton"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/grey"
-        android:text="@string/edit_profile"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/statsSection"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp"/>
-
     <TextView
         android:id="@+id/favorite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/followButton"
+        app:layout_constraintTop_toBottomOf="@id/statsSection"
         android:textAllCaps="true"
         android:text="@string/favorites"
         android:textColor="@color/white"
@@ -200,14 +187,14 @@
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
                         android:src="@drawable/ic_search"
-                        app:tint="@color/accent" />
+                        app:tint="@color/white" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Search"
                         android:textAlignment="center"
-                        android:textColor="@color/accent" />
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
@@ -225,14 +212,14 @@
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
                         android:src="@drawable/ic_person"
-                        app:tint="@color/white" />
+                        app:tint="@color/accent" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Profile"
                         android:textAlignment="center"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/accent" />
 
                 </LinearLayout>
 

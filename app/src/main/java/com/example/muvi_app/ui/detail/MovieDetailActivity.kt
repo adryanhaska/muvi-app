@@ -150,7 +150,6 @@ class MovieDetailActivity : AppCompatActivity() {
                         viewModel.getMovieRecommend(dum)
                     }
                 } catch (e: Exception) {
-                    Log.e("Error fetching recommendations", e.toString())
                     viewModel.getMovieRecommend(dum)
                 }
             } ?: run {
@@ -173,7 +172,6 @@ class MovieDetailActivity : AppCompatActivity() {
                         viewModel.getMovieRecommendGenre(dum)
                     }
                 } catch (e: Exception) {
-                    Log.e("Error fetching recommendations", e.toString())
                     viewModel.getMovieRecommendGenre(dum)
                 }
             } ?: run {

@@ -21,6 +21,7 @@ import com.example.muvi_app.repository.UserRepository
 import com.example.muvi_app.ui.ViewModelFactory
 import com.example.muvi_app.ui.detail.MovieDetailActivity
 import com.example.muvi_app.ui.main.MainActivity
+import com.example.muvi_app.ui.profile.ProfileActivity
 import com.example.muvi_app.ui.search.SearchActivity
 import com.example.muvi_app.ui.settings.SettingsActivity
 import kotlinx.coroutines.launch
@@ -150,7 +151,8 @@ class SocialActivity : AppCompatActivity() {
         }
 
         binding.socialButton.setOnClickListener {
-            // do nothing
+            startActivity(Intent(this, ProfileActivity::class.java))
+            finish()
         }
 
         binding.settingsButton.setOnClickListener {

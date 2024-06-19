@@ -10,6 +10,7 @@ import com.example.muvi_app.repository.UserRepository
 import com.example.muvi_app.ui.detail.MovieDetailViewModel
 import com.example.muvi_app.ui.login.LoginViewModel
 import com.example.muvi_app.ui.main.MainViewModel
+import com.example.muvi_app.ui.profile.ProfileViewModel
 import com.example.muvi_app.ui.search.SearchViewModel
 import com.example.muvi_app.ui.settings.SettingsViewModel
 import com.example.muvi_app.ui.signup.SignUpViewModel
@@ -43,6 +44,9 @@ class ViewModelFactory(
             }
             modelClass.isAssignableFrom(MovieDetailViewModel::class.java) -> {
                 MovieDetailViewModel(userRepository, movieRepository) as T
+            }
+            modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
+                ProfileViewModel(userRepository, movieRepository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }

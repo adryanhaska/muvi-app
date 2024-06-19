@@ -36,7 +36,6 @@ class SignUpViewModel(
             } catch (e: HttpException) {
                 handleHttpException(e)
             } catch (e: Exception) {
-                Log.e(TAG, "Error registering user", e)
             }
         }
     }
@@ -45,7 +44,6 @@ class SignUpViewModel(
         val jsonInString = e.response()?.errorBody()?.string()
         val errorBody = Gson().fromJson(jsonInString, RegisterErrorResponse::class.java)
         val errorMessage = errorBody?.message ?: "Unknown error"
-        Log.d(TAG, "Register Gagal: $errorMessage")
     }
 
     companion object {
