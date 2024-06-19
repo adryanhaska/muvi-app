@@ -1,6 +1,5 @@
 package com.example.muvi_app.ui.main
 
-import MoviePagerAdapter
 import android.os.Bundle
 import com.example.muvi_app.ui.ViewModelFactory
 import com.example.muvi_app.ui.welcome.WelcomeActivity
@@ -17,6 +16,8 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.muvi_app.R
+import com.example.muvi_app.data.adapter.MoviePagerAdapter
+import com.example.muvi_app.data.adapter.MoviesAdapter
 import com.example.muvi_app.data.adapter.RecentAdapter
 import com.example.muvi_app.data.response.Movie
 import com.example.muvi_app.ui.search.SearchActivity
@@ -197,17 +198,25 @@ class MainActivity : AppCompatActivity() {
     private fun setupViewPager() {
         // Example list of movies (replace with your actual data)
         val movies = listOf<Movie>(
-            Movie(posterPath = "/gBcXhSwGq3MKl7HFpaTtK35pHPa.jpg"),
-            Movie(posterPath = "/hu40Uxp9WtpL34jv3zyWLb5zEVY.jpg"),
-            Movie(posterPath = "/fqv8v6AycXKsivp1T5yKtLbGXce.jpg"),
-            Movie(posterPath = "/z1p34vh7dEOnLDmyCrlUVLuoDzd.jpg"),
-            Movie(posterPath = "/xQkotnzv12fm9FF29if1cBLsyU3.jpg"),
-            Movie(posterPath = "/3TNSoa0UHGEzEz5ndXGjJVKo8RJ.jpg"),
+            Movie(posterPath = "/gBcXhSwGq3MKl7HFpaTtK35pHPa.jpg", id = 11363),
+            Movie(posterPath = "/hu40Uxp9WtpL34jv3zyWLb5zEVY.jpg", id = 1096197),
+            Movie(posterPath = "/fqv8v6AycXKsivp1T5yKtLbGXce.jpg", id = 653346),
+            Movie(posterPath = "/z1p34vh7dEOnLDmyCrlUVLuoDzd.jpg", id = 823464),
+            Movie(posterPath = "/xQkotnzv12fm9FF29if1cBLsyU3.jpg", id = 1001311),
+            Movie(posterPath = "/3TNSoa0UHGEzEz5ndXGjJVKo8RJ.jpg", id = 614933),
         )
 
         val viewPager = binding.viewpager
         val adapter = MoviePagerAdapter(movies)
         viewPager.adapter = adapter
+
+        adapter.setOnItemClickListener(object : MoviePagerAdapter.OnItemClickListener {
+            override fun onItemClick(movie: Movie) {
+                val intent = Intent(this@MainActivity, MovieDetailActivity::class.java)
+                intent.putExtra("movie_id", movie.id)
+                startActivity(intent)
+            }
+        })
     }
 
     private fun setupFullscreenMode() {

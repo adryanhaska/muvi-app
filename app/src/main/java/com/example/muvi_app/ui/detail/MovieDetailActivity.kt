@@ -12,10 +12,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.muvi_app.R
 import com.example.muvi_app.data.adapter.CastPagerAdapter
+import com.example.muvi_app.data.adapter.MoviesAdapter
 import com.example.muvi_app.data.response.Movie
 import com.example.muvi_app.databinding.ActivityDetailBinding
 import com.example.muvi_app.ui.ViewModelFactory
-import com.example.muvi_app.ui.main.MoviesAdapter
 import com.example.muvi_app.ui.webView.WebViewActivity
 
 class MovieDetailActivity : AppCompatActivity() {
